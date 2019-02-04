@@ -104,9 +104,9 @@ public class app {
                     System.out.println(Colors.RESET);
                     break;
                 case "problem":
-                    //todo: falta comprobar el worker!.
                     if (lines.length == 2) {
                         rooms.get(lines[1]).setStatus("BROKEN");
+                        System.out.println(Colors.BLUE + "--> Room set as BROKEN <--" + Colors.RESET);
                         if (rooms.get(lines[1]).getCustomer() != null) {
                             moveCustomer(lines[1]);
                         }
@@ -127,6 +127,19 @@ public class app {
                     }
                     break;
                 case "finish":
+                    if (lines.length == 2) {
+                        System.out.println(lines[1]);
+                        for (Worker worker : workers.values()) {
+                            if(worker.getRoom() != null) {
+                                if (worker.getRoom().getNumRoom().equals(lines[1])) {
+                                    worker.setRoom(null);
+                                }
+                                System.out.println(Colors.BLUE + "--> Services finished in room: " + lines[1] + Colors.RESET);
+                            }
+                        }
+                    } else {
+                        throw new MiExcepcion("[ Wrong number of arguments ]");
+                    }
                     break;
                 case "leave":
                     break;
@@ -155,18 +168,16 @@ public class app {
     }
 
     private static void setWorker(String numberRoom, String[] services) {
-        //TODO: se tiene que preguntar MAR sobre el mantenimiento cuartos como funciona...
-        // Si un worker tiene 2 opciones de service
-
         Room roomBroken = rooms.get(numberRoom);
         Set<String> servicesBroken = new HashSet<>(Arrays.asList(services));
 
         for (String service : servicesBroken) {
             for (Worker worker : workers.values()) {
-                if (worker.getIsInRoom() == null) {
+                if (worker.getRoom() == null) {
                     if (worker.getSkills().contains(service)) {
-                        worker.setIsInRoom(roomBroken.getNumRoom());
-                        roomBroken.setWorker(worker);
+                        worker.setRoom(roomBroken);
+                        workers.get(worker.getDni()).setRoom(roomBroken);
+                        System.out.println(Colors.BLUE + "--> Worker " + worker.getName() + " assigned to Room " + roomBroken.getNumRoom() + " <--" + Colors.RESET);
                     }
                 }
             }
@@ -174,11 +185,9 @@ public class app {
 
     }
 
-
     private static void moveCustomer(String numRoom) {
         Customer moveCustomer = rooms.get(numRoom).getCustomer();
         rooms.get(numRoom).setCustomer(null);
-        customers.get(moveCustomer.getDni()).setIsInRoom(null);
         setCustomerToRoom(moveCustomer);
     }
 
@@ -211,7 +220,7 @@ public class app {
                 money -= 100;
                 throw new MiExcepcion("[ There isn't any room available. Custome not asigned. You've lost 100$ ]");
             } else {
-                customers.get(moveCustomer.getDni()).setIsInRoom(goodRoom.getNumRoom());
+                customers.get(moveCustomer.getDni());
                 rooms.get(goodRoom.getNumRoom()).setStatus("RESERVED");
                 rooms.get(goodRoom.getNumRoom()).setCustomer(moveCustomer);
                 System.out.println(Colors.BLUE + "--> reassigned " + moveCustomer.getDni() + " to Room " + goodRoom.getNumRoom() + " <--" + Colors.RESET);
@@ -220,7 +229,6 @@ public class app {
             System.out.println(Colors.RED + "[ Wrong dni or number customers ]" + Colors.RESET);
         }
     }
-
 
     private static void makeCustomer(int dni, String nCustomers, String[] services) throws MiExcepcion {
         try {
@@ -257,7 +265,6 @@ public class app {
                 } else {
                     Customer nCustomer = new Customer(dni, numCustomers, servicesWanted);
                     customers.put(dni, nCustomer);
-                    customers.get(dni).setIsInRoom(goodRoom.getNumRoom());
                     rooms.get(goodRoom.getNumRoom()).setStatus("RESERVED");
                     rooms.get(goodRoom.getNumRoom()).setCustomer(nCustomer);
                     System.out.println(Colors.BLUE + "--> assigned " + dni + " to Room " + goodRoom.getNumRoom() + " <--" + Colors.RESET);
@@ -272,7 +279,6 @@ public class app {
 
     private static void makeWorker(int dni, String name, String[] skills) throws MiExcepcion {
         try {
-            //todo: Falta comprobar el nombre.
             Set<String> skillsGood = new HashSet<>(Arrays.asList(skills));
             if (workers.get(dni) == null) {
                 workers.put(dni, new Worker(dni, name, skillsGood));

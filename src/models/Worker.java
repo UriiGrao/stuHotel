@@ -12,38 +12,34 @@ public class Worker {
     private int dni;
     private String name;
     private Set<String> skills;
-    private String isInRoom;
+    private Room room;
 
-    public Worker(int dni, String name, Set<String> skills) {
+    public Worker(int dni, String name, Set<String> skills) throws MiExcepcion{
         setSkillsDefaults();
         this.dni = dni;
         setName(name);
         setSkills(skills);
-        this.isInRoom = null;
     }
 
     private void setName(String name) {
         this.name = name;
     }
 
-    private void setSkills(Set<String> skills) {
-        try {
-            int cont = 0;
-            for (String skill : skills) {
-                for (String skillDefault : skillsDefaults) {
-                    if (skill.equals(skillDefault)) {
-                        cont++;
-                    }
+    private void setSkills(Set<String> skills) throws MiExcepcion {
+        int cont = 0;
+        for (String skill : skills) {
+            for (String skillDefault : skillsDefaults) {
+                if (skill.equals(skillDefault)) {
+                    cont++;
                 }
             }
-            if (cont == skills.size()) {
-                this.skills = skills;
-            } else {
-                throw new MiExcepcion(Colors.RED + "[ Wrong service ]" + Colors.RESET);
-            }
-        } catch (MiExcepcion mx) {
-            System.out.println(mx.getMessage());
         }
+        if (cont == skills.size()) {
+            this.skills = skills;
+        } else {
+            throw new MiExcepcion(Colors.RED + "[ Wrong service ]" + Colors.RESET);
+        }
+
     }
 
     private void setSkillsDefaults() {
@@ -69,20 +65,20 @@ public class Worker {
         return skills;
     }
 
-    public String getIsInRoom() {
-        return isInRoom;
+    public Room getRoom() {
+        return room;
     }
 
-    public void setIsInRoom(String isInRoom) {
-        this.isInRoom = isInRoom;
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     @Override
     public String toString() {
-        if (isInRoom == null) {
+        if (room == null) {
             return "== " + getClass().getSimpleName().toUpperCase() + " " + getDni() + " " + getName() + " AVAILABLE ==";
         } else {
-            return "== " + getClass().getSimpleName().toUpperCase() + " " + getDni() + " " + getName() + " " + getIsInRoom() + " ==";
+            return "== " + getClass().getSimpleName().toUpperCase() + " " + getDni() + " " + getName() + " " + getRoom().getNumRoom() + " ==";
         }
     }
 }

@@ -13,7 +13,6 @@ public class Room {
     private Set<String> services;
     private String status;
     private Customer customer;
-    private Worker worker;
 
     public Room(String numRoom, int numCustomers, Set<String> services) throws MiExcepcion {
         setServicesDefault();
@@ -21,16 +20,6 @@ public class Room {
         this.numCustomers = numCustomers;
         setServices(services);
         this.status = "CLEAN";
-        customer = null;
-        worker = null;
-    }
-
-    public Worker getWorker() {
-        return worker;
-    }
-
-    public void setWorker(Worker worker) {
-        this.worker = worker;
     }
 
     public Customer getCustomer() {
