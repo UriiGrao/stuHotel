@@ -1,3 +1,4 @@
+
 package models;
 
 import utils.Colors;
@@ -6,7 +7,7 @@ import utils.MiExcepcion;
 import java.util.*;
 
 public class Worker {
-    private static  Set<String> skillsDefaults = new HashSet<>();
+    private static Set<String> skillsDefaults = new HashSet<>();
 
     private int dni;
     private String name;
@@ -29,16 +30,16 @@ public class Worker {
         try {
             int cont = 0;
             for (String skill : skills) {
-                for(String skillDefault : skillsDefaults) {
-                    if(skill.equals(skillDefault)) {
+                for (String skillDefault : skillsDefaults) {
+                    if (skill.equals(skillDefault)) {
                         cont++;
                     }
                 }
             }
-            if(cont == skills.size()) {
+            if (cont == skills.size()) {
                 this.skills = skills;
             } else {
-                throw new MiExcepcion( Colors.RED + "[ Wrong service ]" + Colors.RESET);
+                throw new MiExcepcion(Colors.RED + "[ Wrong service ]" + Colors.RESET);
             }
         } catch (MiExcepcion mx) {
             System.out.println(mx.getMessage());
@@ -74,5 +75,14 @@ public class Worker {
 
     public void setIsInRoom(String isInRoom) {
         this.isInRoom = isInRoom;
+    }
+
+    @Override
+    public String toString() {
+        if (isInRoom == null) {
+            return "== " + getClass().getSimpleName().toUpperCase() + " " + getDni() + " " + getName() + " AVAILABLE ==";
+        } else {
+            return "== " + getClass().getSimpleName().toUpperCase() + " " + getDni() + " " + getName() + " " + getIsInRoom() + " ==";
+        }
     }
 }

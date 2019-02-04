@@ -6,38 +6,46 @@ import utils.MiExcepcion;
 import java.util.*;
 
 public class Room {
-    private static  Set<String> servicesRooms = new HashSet<>();
+    private static Set<String> servicesRooms = new HashSet<>();
 
     private String numRoom;
     private int numCustomers;
     private Set<String> services;
     private String status;
+    private Customer customer;
+    private Worker worker;
 
-    public Room(String numRoom, int numCustomers, Set<String> services) {
+    public Room(String numRoom, int numCustomers, Set<String> services) throws MiExcepcion {
         setServicesDefault();
         this.numRoom = numRoom;
         this.numCustomers = numCustomers;
         setServices(services);
         this.status = "CLEAN";
+        customer = null;
+        worker = null;
     }
 
-    private void setServices(Set<String> services) {
-        try {
-            int cont = 0;
-            for (String service : services) {
-                for (String serviceRooms : servicesRooms) {
-                    if (service.equals(serviceRooms)) {
-                        cont++;
-                    }
-                }
-            }
-            if (cont == services.size()) {
-                this.services = services;
-            } else {
-                throw new MiExcepcion( Colors.RED + "[ Wrong service ]" + Colors.RESET);
-            }
-        } catch (MiExcepcion mx) {
-            System.out.println(mx.getMessage());
+    public Worker getWorker() {
+        return worker;
+    }
+
+    public void setWorker(Worker worker) {
+        this.worker = worker;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    private void setServices(Set<String> services) throws MiExcepcion {
+        if (servicesRooms.containsAll(services)){
+            this.services = services;
+        } else {
+            throw new MiExcepcion("[ Wrong service ]");
         }
     }
 
@@ -61,7 +69,7 @@ public class Room {
         this.status = status;
     }
 
-    private void setServicesDefault(){
+    private void setServicesDefault() {
         // Services from Rooms.
         servicesRooms.add("tv");
         servicesRooms.add("balcon");
@@ -71,5 +79,14 @@ public class Room {
         servicesRooms.add("telefono");
         servicesRooms.add("satelite");
         servicesRooms.add("sweet");
+    }
+
+    @Override
+    public String toString() {
+        if (customer == null) {
+            return "== " + getClass().getSimpleName().toUpperCase() + " " + getNumRoom() + " " + getStatus() + " ==";
+        } else {
+            return "== " + getClass().getSimpleName().toUpperCase() + " " + getNumRoom() + " " + getCustomer().getClass().getSimpleName().toUpperCase() + ":"+ getCustomer().getDni() + "(" + getCustomer().getNumCustomers() + ")" + " ==";
+        }
     }
 }
