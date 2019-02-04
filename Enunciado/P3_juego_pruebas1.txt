@@ -1,0 +1,37 @@
+ROOM 007 2 CAMADOBLE,TV
+room 008 1 satelite,telefono,tv
+room 001 1 tv
+room 009 2 sauna,tv,satelite
+WORKER 33333333 Antonio limpieza,mantenimiento
+worker 44444444 Paco piscina,bar
+worker 33333333 Pepe piscina,mantenimiento
+worker 55555555 Sandra piscina,mantenimiento,sauna
+RESERVATION 11223344 1 tv
+reservation 33445566 2 camadoble,tv,telefono
+reservation 55667788 1 tv
+reservation 88888888 4 jacuzzi,tv,balcon
+money
+hotel
+PROBLEM 001
+PROBLEM 888
+PROBLEM 003
+problem 004
+problem 005
+hotel
+request 001 mantenimiento,limpieza
+request 003 piscina,mantenimiento,limpieza
+request 006 comida,bar
+request 888 bar
+request 001 informatica,limpieza
+hotel
+MONEY
+finish 003
+FINISH 004
+finish 888
+finish
+hotel
+leave 888
+leave 888 500
+LEAVE 006 400
+leave 008 200
+exit

@@ -1,0 +1,117 @@
+--> new Room added 007 <--
+--> new Room added 008 <--
+[ Room already exists ]
+[ Wrong service ]
+--> new Worker added 33333333 <--
+--> new Worker added 44444444 <--
+[ Worker already exists ]
+[ Wrong service ]
+--> Assigned 11223344 to Room 003 <--
+--> Assigned 33445566 to Room 004 <--
+--> Assigned 55667788 to Room 006 <--
+[ There isn't any room available. Customer not asigned. You've lost 100€ ]
+=======================================================
+==>   MONEY : 900 €   <==
+=======================================================
+==> ROOMS <==
+== ROOM 001 CLEAN ==
+== ROOM 002 CLEAN ==
+== ROOM 003 CUSTOMER:11223344(1) ==
+== ROOM 004 CUSTOMER:33445566(2) ==
+== ROOM 005 CLEAN ==
+== ROOM 006 CUSTOMER:55667788(1) ==
+== ROOM 007 CLEAN ==
+== ROOM 008 CLEAN ==
+=======================================================
+==> WORKERS <==
+== WORKER 11111111 Juan AVAILABLE ==
+== WORKER 44444444 Paco AVAILABLE ==
+== WORKER 33333333 Antonio AVAILABLE ==
+== WORKER 12345678 Pepe AVAILABLE ==
+== WORKER 22222222 Clara AVAILABLE ==
+== WORKER 88888888 Maria AVAILABLE ==
+=======================================================
+--> Room set as BROKEN <--
+[ There isn't room with this number ]
+--> Room set as BROKEN <--
+--> Assigned 11223344 to Room 008 <--
+--> Room set as BROKEN <--
+--> Assigned 33445566 to Room 005 <--
+--> Room set as BROKEN <--
+[ There isn't any room available. Customer not asigned. You've lost 100€ ]
+==> ROOMS <==
+== ROOM 001 BROKEN ==
+== ROOM 002 CLEAN ==
+== ROOM 003 BROKEN ==
+== ROOM 004 BROKEN ==
+== ROOM 005 BROKEN ==
+== ROOM 006 CUSTOMER:55667788(1) ==
+== ROOM 007 CLEAN ==
+== ROOM 008 CUSTOMER:11223344(1) ==
+=======================================================
+==> WORKERS <==
+== WORKER 11111111 Juan AVAILABLE ==
+== WORKER 44444444 Paco AVAILABLE ==
+== WORKER 33333333 Antonio AVAILABLE ==
+== WORKER 12345678 Pepe AVAILABLE ==
+== WORKER 22222222 Clara AVAILABLE ==
+== WORKER 88888888 Maria AVAILABLE ==
+=======================================================
+--> Worker Antonio assigned to Room 001 <--
+--> Worker Juan assigned to Room 001 <--
+--> Worker Paco assigned to Room 003 <--
+--> Worker Pepe assigned to Room 003 <--
+--> No Worker available for this service <--
+--> Worker Clara assigned to Room 006 <--
+--> No Worker available for this service. Added to customer pending request <--
+[ There isn't room with this number ]
+[ Wrong service ]
+==> ROOMS <==
+== ROOM 001 BROKEN ==
+== ROOM 002 CLEAN ==
+== ROOM 003 BROKEN ==
+== ROOM 004 BROKEN ==
+== ROOM 005 BROKEN ==
+== ROOM 006 CUSTOMER:55667788(1) ==
+== ROOM 007 CLEAN ==
+== ROOM 008 CUSTOMER:11223344(1) ==
+=======================================================
+==> WORKERS <==
+== WORKER 11111111 Juan ROOM:001 ==
+== WORKER 44444444 Paco ROOM:003 ==
+== WORKER 33333333 Antonio ROOM:001 ==
+== WORKER 12345678 Pepe ROOM:003 ==
+== WORKER 22222222 Clara ROOM:006 ==
+== WORKER 88888888 Maria AVAILABLE ==
+=======================================================
+=======================================================
+==>   MONEY : 800 €   <==
+=======================================================
+--> Services finished in room: 003 <--
+--> There aren't workers in room <--
+[ There isn't room with this number ]
+[ Wrong number of arguments ]
+==> ROOMS <==
+== ROOM 001 BROKEN ==
+== ROOM 002 CLEAN ==
+== ROOM 003 CLEAN ==
+== ROOM 004 BROKEN ==
+== ROOM 005 BROKEN ==
+== ROOM 006 CUSTOMER:55667788(1) ==
+== ROOM 007 CLEAN ==
+== ROOM 008 CUSTOMER:11223344(1) ==
+=======================================================
+==> WORKERS <==
+== WORKER 11111111 Juan ROOM:001 ==
+== WORKER 44444444 Paco AVAILABLE ==
+== WORKER 33333333 Antonio ROOM:001 ==
+== WORKER 12345678 Pepe AVAILABLE ==
+== WORKER 22222222 Clara ROOM:006 ==
+== WORKER 88888888 Maria AVAILABLE ==
+=======================================================
+[ Wrong number of arguments ]
+[ There isn't room with this number ]
+-> Room 006 free and set to UNCLEAN <--
+--> Unsatisfied clients. You loose 200 € <--
+-> Room 008 free and set to UNCLEAN <--
+--> Satisfied clients. You win 200 € <--
