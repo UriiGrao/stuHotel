@@ -11,4 +11,7 @@ public class Manager {
             System.exit(0);
         }
     }
+    public static String printBlue(String text){
+        return Colors.BLUE + text + Colors.RESET;
+    }
 }
