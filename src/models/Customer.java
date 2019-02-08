@@ -14,6 +14,7 @@ public class Customer {
         this.servicesWanted = servicesWanted;
     }
     public void setOneServiceRequest(String service) {
+        System.out.println(service);
         this.servicesRequest.add(service);
     }
     public Set<String> getServicesRequest() {

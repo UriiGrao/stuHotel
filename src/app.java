@@ -68,7 +68,7 @@ public class app {
                     if (lines.length == 4) {
                         String[] servicesRoom = lines[3].toLowerCase().split(",");
                         makeRoom(lines[1], lines[2], servicesRoom);
-                        System.out.println(Manager.printBlue("--> new Room added " + lines[1] + " <--" ));
+                        System.out.println(Manager.printBlue("--> new Room added " + lines[1] + " <--"));
                         break;
                     } else {
                         throw new MiExcepcion("[ Wrong number of arguments ]");
@@ -124,19 +124,36 @@ public class app {
                     break;
                 case "finish":
                     if (lines.length == 2) {
-                            for (Worker worker : workers.values()) {
-                                if (worker.getRoom() != null) {
-                                    if (worker.getRoom().getNumRoom().equals(lines[1])) {
-                                        worker.setRoom(null);
-                                    }
-                                    System.out.println(Manager.printBlue("--> Services finished in room: " + lines[1]));
+                        for (Worker worker : workers.values()) {
+                            if (worker.getRoom() != null) {
+                                if (worker.getRoom().getNumRoom().equals(lines[1])) {
+                                    worker.setRoom(null);
                                 }
                             }
-                            throw new MiExcepcion("[ No problems in this room ]");
+                        }
+                        System.out.println(Manager.printBlue("--> Services finished in room: " + lines[1]));
                     } else {
                         throw new MiExcepcion("[ Wrong number of arguments ]");
                     }
                 case "leave":
+                    if (lines.length == 2) {
+                        Room roomLeave = rooms.get(lines[1]);
+                        if (roomLeave.getCustomer() != null) {
+                            roomLeave.setStatus("UNCLEAN");
+                            //todo: FALLA aaaa
+                            Customer customerLeave = roomLeave.getCustomer();
+                            if (customerLeave.getServicesRequest().size() == 0) {
+                                money += 100;
+                            } else {
+                                money -= 50;
+                            }
+                            roomLeave.setCustomer(null);
+                        } else {
+                            throw new MiExcepcion("[ This room no have reservation ]");
+                        }
+                    } else {
+                        throw new MiExcepcion("[ Wrong number of arguments ]");
+                    }
                     break;
                 case "money":
                     if (lines.length == 1) {
@@ -167,22 +184,36 @@ public class app {
         Room roomBroken = rooms.get(numberRoom);
         Set<String> servicesBroken = new HashSet<>(Arrays.asList(services));
         boolean chivato;
+
         for (String service : servicesBroken) {
             chivato = false;
-            for (Worker worker : workers.values()) {
-                if (worker.getRoom() == null) {
-                    if (worker.getSkills().contains(service)) {
-                        worker.setRoom(roomBroken);
-                        workers.get(worker.getDni()).setRoom(roomBroken);
-                        System.out.println(Manager.printBlue("--> Worker " + worker.getName() + " assigned to Room " + roomBroken.getNumRoom() + " <--"));
-                        chivato = true;
-                    }
-                }
+            Worker worker = searchWorker(service);
+            if (worker != null) {
+                worker.setRoom(roomBroken);
+                workers.get(worker.getDni()).setRoom(roomBroken);
+                System.out.println(Manager.printBlue("--> Worker " + worker.getName() + " assigned to Room " + roomBroken.getNumRoom() + " <--"));
+            } else {
+                chivato = true;
             }
-            if (!chivato) {
-                rooms.get(roomBroken.getNumRoom()).getCustomer().setOneServiceRequest(service);
+
+            if (chivato) {
+                //todo: ESTO NO FUNCIONA ABRA QUE PENSAR MEJOR!
+                Customer noHappy1 = rooms.get(roomBroken.getNumRoom()).getCustomer();
+                System.out.println(noHappy1.getDni());
+                noHappy1.setOneServiceRequest(service);
             }
         }
+    }
+
+    private static Worker searchWorker(String service) {
+        for (Worker worker : workers.values()) {
+            if (worker.getRoom() == null) {
+                if (worker.getSkills().contains(service)) {
+                    return worker;
+                }
+            }
+        }
+        return null;
     }
 
     private static void moveCustomer(String numRoom) throws MiExcepcion {
@@ -192,38 +223,38 @@ public class app {
     }
 
     private static void setCustomerToRoom(Customer moveCustomer) throws MiExcepcion {
-            Room goodRoom = null;
-            boolean breac = false;
+        Room goodRoom = null;
+        boolean breac = false;
 
-            for (Room room : rooms.values()) {
-                if (!breac) {
-                    if (room.getStatus().equals("CLEAN")) {
-                        if (room.getServices().containsAll(moveCustomer.getServicesWanted())) {
-                            if (room.getNumCustomers() == moveCustomer.getNumCustomers()) {
-                                goodRoom = room;
-                                breac = true;
-                            } else {
-                                if (room.getNumCustomers() > moveCustomer.getNumCustomers() && goodRoom != null) {
-                                    if (goodRoom.getNumCustomers() > room.getNumCustomers()) {
-                                        goodRoom = room;
-                                    }
-                                } else if (room.getNumCustomers() > moveCustomer.getNumCustomers()) {
+        for (Room room : rooms.values()) {
+            if (!breac) {
+                if (room.getStatus().equals("CLEAN")) {
+                    if (room.getServices().containsAll(moveCustomer.getServicesWanted())) {
+                        if (room.getNumCustomers() == moveCustomer.getNumCustomers()) {
+                            goodRoom = room;
+                            breac = true;
+                        } else {
+                            if (room.getNumCustomers() > moveCustomer.getNumCustomers() && goodRoom != null) {
+                                if (goodRoom.getNumCustomers() > room.getNumCustomers()) {
                                     goodRoom = room;
                                 }
+                            } else if (room.getNumCustomers() > moveCustomer.getNumCustomers()) {
+                                goodRoom = room;
                             }
                         }
                     }
                 }
             }
-            if (goodRoom == null) {
-                money -= 100;
-                throw new MiExcepcion("[ There isn't any room available. Custome not asigned. You've lost 100$ ]");
-            } else {
-                customers.get(moveCustomer.getDni());
-                rooms.get(goodRoom.getNumRoom()).setStatus("RESERVED");
-                rooms.get(goodRoom.getNumRoom()).setCustomer(moveCustomer);
-                System.out.println(Manager.printBlue("--> reassigned " + moveCustomer.getDni() + " to Room " + goodRoom.getNumRoom() + " <--"));
-            }
+        }
+        if (goodRoom == null) {
+            money -= 100;
+            throw new MiExcepcion("[ There isn't any room available. Custome not asigned. You've lost 100$ ]");
+        } else {
+            customers.get(moveCustomer.getDni());
+            rooms.get(goodRoom.getNumRoom()).setStatus("RESERVED");
+            rooms.get(goodRoom.getNumRoom()).setCustomer(moveCustomer);
+            System.out.println(Manager.printBlue("--> reassigned " + moveCustomer.getDni() + " to Room " + goodRoom.getNumRoom() + " <--"));
+        }
     }
 
     private static void makeCustomer(int dni, String nCustomers, String[] services) throws MiExcepcion {
